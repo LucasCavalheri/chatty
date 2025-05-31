@@ -57,5 +57,19 @@ export const useAuthStore = create((set) => ({
       console.log(error)
       toast.error('Ocorreu um erro ao deslogar')
     }
+  },
+
+  updateProfile: async (data) => {
+    set({ isUpdatingProfile: true })
+    try {
+      const res = await api.put('/auth/update-profile', data)
+      set({ authUser: res.data })
+      toast.success('Perfil atualizado com sucesso!')
+    } catch (error) {
+      console.log(error)
+      toast.error('Ocorreu um erro ao atualizar o perfil')
+    } finally {
+      set({ isUpdatingProfile: false })
+    }
   }
 }))
