@@ -7,17 +7,17 @@ const signup = async (req, res) => {
     const { fullName, email, password } = req.body
 
     if (!fullName || !email || !password) {
-      return res.status(400).json({ message: 'All fields are required' })
+      return res.status(400).json({ message: 'Todos os campos são obrigatórios' })
     }
 
     if (password.length < 6) {
-      return res.status(400).json({ message: 'Password must be at least 6 characters long' })
+      return res.status(400).json({ message: 'A senha deve ter pelo menos 6 caracteres' })
     }
 
     const user = await User.findOne({ email })
 
     if (user) {
-      return res.status(400).json({ message: 'Email already exists' })
+      return res.status(400).json({ message: 'Email já existe' })
     }
 
     const newUser = new User({ fullName, email, password })
@@ -33,7 +33,7 @@ const signup = async (req, res) => {
         profilePic: newUser.profilePic
       })
     } else {
-      return res.status(400).json({ message: 'Invalid user data' })
+      return res.status(400).json({ message: 'Dados do usuário inválidos' })
     }
   } catch (error) {
     console.log('Error in signup controller', error)
@@ -46,19 +46,19 @@ const login = async (req, res) => {
     const { email, password } = req.body
 
     if (!email || !password) {
-      return res.status(400).json({ message: 'All fields are required' })
+      return res.status(400).json({ message: 'Todos os campos são obrigatórios' })
     }
 
     const user = await User.findOne({ email })
 
     if (!user) {
-      return res.status(400).json({ message: 'Invalid credentials' })
+      return res.status(400).json({ message: 'Credenciais inválidas' })
     }
 
     const isPasswordCorrect = await user.comparePassword(password)
 
     if (!isPasswordCorrect) {
-      return res.status(400).json({ message: 'Invalid credentials' })
+      return res.status(400).json({ message: 'Credenciais inválidas' })
     }
 
     generateToken(user._id, res)
@@ -79,7 +79,7 @@ const logout = (_req, res) => {
   try {
     res.cookie('jwt', '', { maxAge: 0 })
 
-    return res.status(200).json({ message: 'Logged out successfully' })
+    return res.status(200).json({ message: 'Deslogado com sucesso' })
   } catch (error) {
     console.log('Error in logout controller', error)
     return res.status(500).json({ message: 'Internal server error' })
@@ -92,7 +92,7 @@ const updateProfile = async (req, res) => {
     const userId = req.user._id
 
     if (!profilePic) {
-      return res.status(400).json({ message: 'Profile picture is required' })
+      return res.status(400).json({ message: 'Profile picture é obrigatório' })
     }
 
     const uploadResponse = await cloudinary.uploader.upload(profilePic)
