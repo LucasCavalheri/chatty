@@ -8,8 +8,6 @@ const { app, server } = require('./lib/socket')
 const { connectDB } = require('./lib/db')
 require('dotenv').config()
 
-const __dirname = path.resolve()
-
 app.use(express.json())
 app.use(cookieParser())
 app.use(
